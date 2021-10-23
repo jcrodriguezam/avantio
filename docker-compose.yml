@@ -1,0 +1,30 @@
+version: "3"
+##############################################################################
+# Services
+##############################################################################
+services:
+  mongodb:
+    image : mongo
+    container_name: mongodb
+    environment:
+    - PUID=1000
+    - PGID=1000
+    volumes:
+    - /home/barry/mongodb/database:/data/db
+    ports:
+    - 27018:27017
+    restart: unless-stopped
+
+  orchestrator:
+    image: orchestrator:local
+    build:
+      context: ./services/orchestrator
+      dockerfile: Dockerfile.dev
+    command: npm run dev
+    stdin_open: true
+    tty: true
+    volumes:
+      - "./services/orchestrator:/app"
+    ports:
+      - "3000"
+    restart: unless-stopped
