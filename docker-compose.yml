@@ -1,7 +1,5 @@
 version: "3"
-##############################################################################
-# Services
-##############################################################################
+
 services:
   mongodb:
     image : mongo
@@ -10,21 +8,22 @@ services:
     - PUID=1000
     - PGID=1000
     volumes:
-    - /home/barry/mongodb/database:/data/db
+    - /home/juancarlos/mongodb/database:/data/db
     ports:
     - 27018:27017
     restart: unless-stopped
 
-  orchestrator:
-    image: orchestrator:local
+  backend:
+    image: backend:local
     build:
-      context: ./services/orchestrator
+      context: ./backend
       dockerfile: Dockerfile.dev
     command: npm run dev
     stdin_open: true
     tty: true
+    network_mode: host
     volumes:
-      - "./services/orchestrator:/app"
+      - "./backend:/app"
     ports:
       - "3000"
     restart: unless-stopped
