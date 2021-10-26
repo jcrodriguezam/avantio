@@ -19,9 +19,9 @@ async function add(body) {
 
 exports.add = add;
 
-async function update(filter, body) {
+async function update(id, body) {
   const update = {...body, edited: true}
-  const newFeed = await Feed.findOneAndUpdate(filter, update, {rawResult: true});
+  const newFeed = await Feed.findOneAndUpdate({id}, update, {rawResult: true});
   return newFeed;
 }
 
@@ -33,3 +33,11 @@ async function deleteFeed(dateAsString, publisher) {
 }
 
 exports.deleteFeed = deleteFeed;
+
+async function setDeleted(id) {
+  const deleteFeed = await Feed.findOneAndUpdate({id}, {deleted: true}, {rawResult: true});
+
+  return deleteFeed;
+}
+
+exports.setDeleted = setDeleted;
