@@ -1,5 +1,5 @@
-var mongoose = require('mongoose')
-var Schema = mongoose.Schema
+var mongoose = require("mongoose");
+var Schema = mongoose.Schema;
 
 function getTodayAsString() {
   const d = new Date();
@@ -7,13 +7,13 @@ function getTodayAsString() {
   const month = `0${d.getMonth() + 1}`.slice(-2);
   const day = `0${d.getDate()}`.slice(-2);
 
-  return `${year}${month}${day}`
+  return `${year}${month}${day}`;
 }
 
 const feedSchema = new Schema({
   title: {
     type: String,
-    required: true
+    required: true,
   },
   image: {
     type: String,
@@ -23,11 +23,11 @@ const feedSchema = new Schema({
   },
   source: {
     type: String,
-    required: true
+    required: true,
   },
   created: {
     type: Date,
-    default: new Date()
+    default: new Date(),
   },
   dateAsString: {
     type: String,
@@ -48,7 +48,7 @@ const feedSchema = new Schema({
     type: Boolean,
     default: false,
   },
-})
+});
 
-var Feed = mongoose.model('Feed', feedSchema)
-module.exports = Feed
+var Feed = mongoose.model("Feed", feedSchema);
+module.exports = Feed;

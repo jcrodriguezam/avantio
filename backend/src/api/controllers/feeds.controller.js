@@ -1,15 +1,13 @@
-const Feed = require('../models/feeds.model');
-const feedsRepo = require('../repository/feeds.repository');
-const webScrap = require('../services/webScrap');
-
+const Feed = require("../models/feeds.model");
+const feedsRepo = require("../repository/feeds.repository");
+const webScrap = require("../services/webScrap");
 
 async function getNewData() {
   const ws = await webScrap.getData();
-
   for (const newArticle of ws) {
-    const oldArticle = await feedsRepo.find({id: newArticle.id});
+    const oldArticle = await feedsRepo.find({ id: newArticle.id });
     if (!oldArticle.length) {
-      await feedsRepo.add(newArticle)
+      await feedsRepo.add(newArticle);
     }
   }
 
@@ -22,30 +20,27 @@ function getTodayAsString() {
   const month = `0${d.getMonth() + 1}`.slice(-2);
   const day = `0${d.getDate()}`.slice(-2);
 
-  return `${year}${month}${day}`
+  return `${year}${month}${day}`;
 }
 
 async function getFeed(req, res) {
   const { params } = req;
-  let query = {deleted: false}
+  let query = { deleted: false };
   const today = getTodayAsString();
-  
+
   if (params) {
     const { dateAsString } = params;
     if (dateAsString) {
-      query.dateAsString= dateAsString
+      query.dateAsString = dateAsString;
     }
   }
 
   if (!query.dateAsString || query.dateAsString === today) {
-    const todayFeeds = await feedsRepo.find({dateAsString: today});
-    if(!todayFeeds.length) {
-      await getNewData();
-    }
+    await getNewData();
   }
 
   const result = await feedsRepo.find(query);
-  result.sort((a, b) => a.dateAsString < b.dateAsString && 1 || -1)
+  result.sort((a, b) => (a.dateAsString < b.dateAsString && 1) || -1);
   res.send(result);
 }
 
@@ -53,28 +48,28 @@ exports.getFeed = getFeed;
 
 async function postFeed(req, res) {
   const { body } = req;
-  const feed = feedsRepo.add(body)
-  new Feed({...body});
+  const feed = feedsRepo.add(body);
+  new Feed({ ...body });
 
-  res.send(feed)
+  res.send(feed);
 }
 
 exports.postFeed = postFeed;
 
 async function patchFeed(req, res) {
-  const {body, params} = req;
-  const { id } =  params;
-  const newFeed = await feedsRepo.update(id, {...body});
-  res.send(newFeed)
+  const { body, params } = req;
+  const { id } = params;
+  const newFeed = await feedsRepo.update(id, { ...body });
+  res.send(newFeed);
 }
 
 exports.patchFeed = patchFeed;
 
 async function deleteFeed(req, res) {
-  const {params} = req;
-  const { id } =  params;
+  const { params } = req;
+  const { id } = params;
   const newFeed = await feedsRepo.setDeleted(id);
-  res.send(newFeed)
+  res.send(newFeed);
 }
 
 exports.deleteFeed = deleteFeed;
