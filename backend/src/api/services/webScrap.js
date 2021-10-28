@@ -1,6 +1,6 @@
 const scrapeIt = require("scrape-it");
 
-function getDateAsString() {
+function getTodayAsString() {
     const d = new Date();
     const year = d.getFullYear();
     const month = `0${d.getMonth() + 1}`.slice(-2);
@@ -20,8 +20,10 @@ async function getElPaisData() {
         presentations: {
             listItem: 'main article',
             data: {
-                title: 'header h2 a',
-                source: 'p',
+                title: {
+                    selector: 'header h2 a',
+                },
+                description: 'p',
                 image: {
                     selector: 'figure a img',
                     attr: 'src'
@@ -39,8 +41,8 @@ async function getElPaisData() {
         const newArticle = { ...article };
         if (newArticle.link) {
             newArticle.link = `https://elpais.com${newArticle.link}`;
-            newArticle.publisher = 'elPais';
-            newArticle.id = `${getDateAsString()}_elPais_${index}`
+            newArticle.source = 'el Pais';
+            newArticle.id = `${getTodayAsString()}_elPais_${index}`
             index += 1;
             result.push(newArticle);
         }
@@ -53,7 +55,9 @@ async function getElMundoData() {
         presentations: {
             listItem: 'article div.ue-c-cover-content__body',
             data: {
-                title: 'header a h2',
+                title: {
+                    selector: 'header a h2',
+            },
                 image: {
                     selector: 'figure.ue-c-cover-content__figure picture img',
                     attr: 'src'
@@ -70,8 +74,8 @@ async function getElMundoData() {
     scrapeResult.data.presentations.forEach((article) => {
         const newArticle = { ...article };
         if (newArticle.link) {
-            newArticle.publisher = 'elMundo';
-            newArticle.id = `${getDateAsString()}_elMundo_${index}`;
+            newArticle.source = 'el Mundo';
+            newArticle.id = `${getTodayAsString()}_elMundo_${index}`;
             index += 1;
             result.push(newArticle);
         }

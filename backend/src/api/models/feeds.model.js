@@ -1,7 +1,7 @@
 var mongoose = require('mongoose')
 var Schema = mongoose.Schema
 
-function getDateAsString() {
+function getTodayAsString() {
   const d = new Date();
   const year = d.getFullYear();
   const month = `0${d.getMonth() + 1}`.slice(-2);
@@ -18,10 +18,10 @@ const feedSchema = new Schema({
   image: {
     type: String,
   },
-  source: {
+  description: {
     type: String,
   },
-  publisher: {
+  source: {
     type: String,
     required: true
   },
@@ -31,7 +31,7 @@ const feedSchema = new Schema({
   },
   dateAsString: {
     type: String,
-    default: getDateAsString(),
+    default: getTodayAsString(),
   },
   edited: {
     type: Boolean,
@@ -39,6 +39,10 @@ const feedSchema = new Schema({
   },
   id: {
     type: String,
+  },
+  link: {
+    type: String,
+    required: true,
   },
   deleted: {
     type: Boolean,

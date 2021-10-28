@@ -2,17 +2,51 @@ const Feed = require('../models/feeds.model');
 const feedsRepo = require('../repository/feeds.repository');
 const webScrap = require('../services/webScrap');
 
+
+async function getNewData() {
+  const ws = await webScrap.getData();
+
+  for (const newArticle of ws) {
+    const oldArticle = await feedsRepo.find({id: newArticle.id});
+    if (!oldArticle.length) {
+      await feedsRepo.add(newArticle)
+    }
+  }
+
+  return;
+}
+
+function getTodayAsString() {
+  const d = new Date();
+  const year = d.getFullYear();
+  const month = `0${d.getMonth() + 1}`.slice(-2);
+  const day = `0${d.getDate()}`.slice(-2);
+
+  return `${year}${month}${day}`
+}
+
 async function getFeed(req, res) {
   const { params } = req;
-  let query = {}
+  let query = {deleted: false}
+  const today = getTodayAsString();
+  
   if (params) {
     const { dateAsString } = params;
     if (dateAsString) {
-      query={dateAsString}
+      query.dateAsString= dateAsString
     }
   }
-  const result = await feedsRepo.find(query)
-  res.send({...result});
+
+  if (!query.dateAsString || query.dateAsString === today) {
+    const todayFeeds = await feedsRepo.find({dateAsString: today});
+    if(!todayFeeds.length) {
+      await getNewData();
+    }
+  }
+
+  const result = await feedsRepo.find(query);
+  result.sort((a, b) => a.dateAsString < b.dateAsString && 1 || -1)
+  res.send(result);
 }
 
 exports.getFeed = getFeed;
@@ -46,13 +80,7 @@ async function deleteFeed(req, res) {
 exports.deleteFeed = deleteFeed;
 
 async function getData(req, res) {
-  const ws = await webScrap.getData();
-  ws.forEach(async (article) => {
-    const oldArticle = await feedsRepo.find({id: article.id});
-    if (!oldArticle.length) {
-      feedsRepo.add(article)
-    }
-  })
+  await getNewData();
   res.end();
 }
 

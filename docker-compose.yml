@@ -25,5 +25,20 @@ services:
     volumes:
       - "./backend:/app"
     ports:
+      - "4000"
+    restart: unless-stopped
+
+  frontend:
+    image: frontend:local
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    command: npm run start
+    stdin_open: true
+    tty: true
+    network_mode: host
+    volumes:
+      - "./frontend:/app"
+    ports:
       - "3000"
     restart: unless-stopped
