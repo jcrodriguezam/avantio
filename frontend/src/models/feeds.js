@@ -1,27 +1,16 @@
 /* eslint-disable import/no-anonymous-default-export */
 import axios from "axios";
-
 const API_URL = "http://localhost:4000";
-
-// console.log('DOMAIN', DOMAIN)
 
 export default {
   state: {
     data: [],
   },
   reducers: {
-    SUCCESS(state, payload) {},
-    ERROR(state, payload) {},
-    LOGOUT() {},
     SET_PROP(state, payload) {
       return {
         ...state,
         [payload.key]: payload.value,
-      };
-    },
-    SET_STATE(payload) {
-      return {
-        ...payload,
       };
     },
   },
@@ -40,6 +29,13 @@ export default {
       const { feed } = payload;
       const { id } = feed;
       await axios.delete(`${API_URL}/id/${id}`);
+      dispatch.feeds.loadData();
+    },
+    async addFeed(payload) {
+      const { feed } = payload;
+      let id = feed.title;
+      feed.id = id.replace(/\s/g, "_");
+      await axios.post(`${API_URL}`, { ...feed });
       dispatch.feeds.loadData();
     },
   }),

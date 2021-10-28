@@ -9,17 +9,36 @@ import CssBaseline from "@mui/material/CssBaseline";
 
 export default function App() {
   const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
-
   const theme = React.useMemo(
     () =>
       createTheme({
         palette: {
-          mode: "light",
+          mode: "dark",
           // mode: prefersDarkMode ? 'dark' : 'light',
+          primary: {
+            main: "#e93b56",
+            light: "#e93b56a1",
+            dark: "#c52c44",
+          },
+          secondary: {
+            main: "#30d380",
+            light: "#30d380b3",
+            dark: "#7dd5a8",
+          },
+          tertiary: {
+            main: "#fff",
+            light: "#fff",
+            dark: "#fff",
+          },
+          background: {
+            default: "#231a32",
+            paper: "#180f1e",
+          },
         },
       }),
     [prefersDarkMode]
   );
+
   return (
     <div className="App">
       <ThemeProvider theme={theme}>
