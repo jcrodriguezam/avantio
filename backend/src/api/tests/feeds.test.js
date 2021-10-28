@@ -43,6 +43,7 @@ const FEEDS = [
     publisher: "elPais",
     dateAsString: "22122018",
     edited: false,
+    link: 'www.google.es'
   },
   {
     id: "00002",
@@ -52,6 +53,7 @@ const FEEDS = [
     publisher: "elPais",
     dateAsString: "17072021",
     edited: false,
+    link: 'www.google.es'
   },
   {
     id: "00003",
@@ -61,6 +63,7 @@ const FEEDS = [
     publisher: "elMundo",
     dateAsString: "16041983",
     edited: true,
+    link: 'www.google.es'
   },
   {
     id: "00004",
@@ -70,6 +73,7 @@ const FEEDS = [
     publisher: "elMundo",
     dateAsString: "19101986",
     edited: false,
+    link: 'www.google.es'
   },
 ];
 
@@ -111,6 +115,16 @@ describe("Feeds", () => {
 
   test("This shuld add feeds", async () => {
     const res = await axios.post(`${BASE_URL}/`, { ...FEEDS[3] });
+    expect(res.status).toBe(200);
+  });
+
+  test("This shuld delete feed", async () => {
+    const res = await axios.delete(`${BASE_URL}/id/00001`);
+    expect(res.status).toBe(200);
+  });
+
+  test("This shuld patch feed", async () => {
+    const res = await axios.patch(`${BASE_URL}/id/00002`, { title: 'nuevo titulo' });
     expect(res.status).toBe(200);
   });
 });
