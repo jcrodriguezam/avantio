@@ -1,19 +1,20 @@
 import * as React from "react";
 import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
-import Typography from "@mui/material/Typography";
-import { Button, CardActionArea, CardActions } from "@mui/material";
-import IconButton from "@mui/material/IconButton";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import ShareIcon from "@mui/icons-material/Share";
-import Paper from "@mui/material/Paper";
-import Slide from "@mui/material/Slide";
+import {
+  CardContent,
+  CardMedia,
+  Typography,
+  Button,
+  CardActionArea,
+  CardActions,
+  Slide,
+  Box
+} from "@mui/material/";
 
 import elMundo from "../static/elmundo.png";
 import elPais from "../static/elpais.jpg";
+import Chip from '@mui/material/Chip';
 
-import { useDispatch, useSelector } from "react-redux";
 import { makeStyles } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
@@ -23,32 +24,38 @@ const useStyles = makeStyles((theme) => ({
   },
   img: { maxHeight: "40px", height: "auto" },
   sourceTitle: { padding: ".7rem 1rem", fontWeight: 900 },
+  cardHeader: {
+    display: 'flex',
+    alignItems: 'center',
+    paddingRight: '1rem',
+  }
 }));
-
-const getTodayAsString = () => {
-  const d = new Date();
-  const year = d.getFullYear();
-  const month = `0${d.getMonth() + 1}`.slice(-2);
-  const day = `0${d.getDate()}`.slice(-2);
-
-  return `${year}${month}${day}`;
-};
 
 export default function Article({ edit, data, parentContainer }) {
   const classes = useStyles();
 
-  const today = getTodayAsString();
-  const { title, image, source, description, dateAsString, link } = data;
+  const { 
+    title,
+    image,
+    source,
+    description,
+    link,
+    created,
+  } = data;
 
+  const isOld = new Date();
+  isOld.setHours(isOld.getHours() - 1);
+  const isNew = new Date(created) > isOld;
   return (
     <Slide direction="up" in={true} container={parentContainer.current}>
       <Card
         className={classes.card}
         elevation={10}
         style={{
-          borderBottom: dateAsString === today ? "2px solid #e93b56" : "none",
+          borderBottom: isNew ? "2px solid #e93b56" : "none",
         }}
       >
+        <Box className={classes.cardHeader}>
         {source && (source === "el Mundo" || source === "el Pais") ? (
           <img
             src={source === "el Mundo" ? elMundo : elPais}
@@ -64,6 +71,11 @@ export default function Article({ edit, data, parentContainer }) {
             {source.toUpperCase()}
           </Typography>
         )}
+                    <Box sx={{ flexGrow: 1 }} />
+        {isNew ? (
+          <Chip label="NUEVA" color="primary" size="small"/>
+        ) : ''}
+        </Box>
         <CardActionArea
           onClick={() => {
             window.open(link, "_blank");

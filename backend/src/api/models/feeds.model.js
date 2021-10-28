@@ -47,7 +47,7 @@ const feedSchema = new Schema({
   deleted: {
     type: Boolean,
     default: false,
-  },
+  }
 });
 
 var Feed = mongoose.model("Feed", feedSchema);
