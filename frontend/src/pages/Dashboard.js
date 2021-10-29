@@ -19,6 +19,7 @@ const Dashboard = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const [edit, setEdit] = React.useState(false);
+  // eslint-disable-next-line
   const [currentArticle, setArticle] = React.useState(false);
   const boxRef = React.useRef(null);
 
@@ -33,6 +34,7 @@ const Dashboard = () => {
   const newData = useSelector((state) => state.feeds.data) || [];
   React.useEffect(() => {
     dispatch.feeds.loadData();
+    // eslint-disable-next-line
   }, []);
 
   return (

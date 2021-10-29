@@ -92,7 +92,7 @@ export default function Article({ edit, data, parentContainer }) {
             </Typography>
             {description ? (
               <Typography variant="body2" color="text.secondary">
-                {description}
+                { description.toString('iso-8859-1')}
               </Typography>
             ) : (
               ""

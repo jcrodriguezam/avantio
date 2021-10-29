@@ -89,7 +89,7 @@ export default function FeedData({ open, toggle, data, isEdit }) {
       <Box className={classes.mainBox} role="presentation">
         <Box sx={{ flexGrow: 1 }}>
           <Typography gutterBottom variant="h5">
-            {isEdit ? "Nuevo Feed" : "Editar Feed"}
+            {isEdit ? "Editar Feed" : "Nuevo Feed"}
           </Typography>
         </Box>
         <Box>
