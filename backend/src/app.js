@@ -8,8 +8,10 @@ app.use(cors());
 app.get("/alive", (req, res) => {
   res.sendStatus(200);
 });
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({limit: '60mb'}));
+app.use(express.text({ limit: '60mb' }));
+
+app.use(express.urlencoded({ limit: '60mb', extended: true }));
 app.use(router);
 
 module.exports = app;

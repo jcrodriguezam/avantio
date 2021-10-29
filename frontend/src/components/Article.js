@@ -73,7 +73,7 @@ export default function Article({ edit, data, parentContainer }) {
         )}
                     <Box sx={{ flexGrow: 1 }} />
         {isNew ? (
-          <Chip label="NUEVA" color="primary" size="small"/>
+          <Chip label="NUEVO" color="primary" size="small"/>
         ) : ''}
         </Box>
         <CardActionArea

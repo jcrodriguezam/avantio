@@ -1,7 +1,7 @@
 const Feed = require("../models/feeds.model");
 
 async function find(query) {
-  return Feed.find(query);
+  return Feed.find(query).sort({'created': -1}).limit(50);
 }
 
 exports.find = find;

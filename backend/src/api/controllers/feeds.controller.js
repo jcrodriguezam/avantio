@@ -40,7 +40,6 @@ async function getFeed(req, res) {
   }
 
   const result = await feedsRepo.find(query);
-  result.sort((a, b) => (a.dateAsString < b.dateAsString && 1) || -1);
   res.send(result);
 }
 
